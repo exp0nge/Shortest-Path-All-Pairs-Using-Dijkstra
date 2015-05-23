@@ -79,6 +79,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Dijkstra.h" />
+    <ClInclude Include="ShortestPathPairs.h" />
     <ClInclude Include="Vertex.h" />
   </ItemGroup>
   <ItemGroup>

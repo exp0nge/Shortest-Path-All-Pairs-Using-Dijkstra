@@ -5,22 +5,26 @@
 #ifndef HW8_DIJKSTRA_DIJKSTRA_H
 #define HW8_DIJKSTRA_DIJKSTRA_H
 #include <iostream>
-#include <vector>
 #include "Vertex.h"
 
 namespace md_islam{
     class Dijkstra{
     public:
         const static unsigned int INF = 429496723;
-        Dijkstra(std::vector<Vertex *> *listOfVertices, Vertex* start, Vertex* end){
+        Dijkstra(std::list<Vertex *> *&listOfVertices, Vertex* start, Vertex* end){
             this->listOfVertices = listOfVertices;
-			this->listOfVisitedVertices = new std::vector < Vertex* > ;
+			this->listOfVisitedVertices = new std::list < Vertex* > ;
             findShortestPath(start, end);
 
         }
         void findShortestPath(Vertex * start, Vertex * end){
+			if (start == end)
+			{
+				return;
+			}
+			
             //set  vertices weight = INF
-            for(std::vector<Vertex *>::iterator it = this->listOfVertices->begin();
+            for(std::list<Vertex *>::iterator it = this->listOfVertices->begin();
                     it != this->listOfVertices->end(); ++it){
                 (*it)->setValue(INF);
             }
@@ -31,20 +35,27 @@ namespace md_islam{
 
             //recursively go through graph
             calculateShortestWeight(start, end);
+			
 
             //print trace
+			this->trace_vector = new std::list < char > ;
             printTree(end, start);
 
 
+        }
+		~Dijkstra()
+        {
+			delete this->trace_vector;
+			delete this->listOfVisitedVertices;
         }
         void calculateShortestWeight(Vertex * vertex, Vertex * end){
             if(vertex == end)
                 return;
 			else{
-				std::vector<Vertex *> * neighbors = vertex->getNeighborVector();
+				std::list<Vertex *> * neighbors = vertex->getNeighborVector();
 				int newCost;
 				//visit , set new values/parents
-				for (std::vector<Vertex *>::iterator it = neighbors->begin(); it != neighbors->end(); ++it){
+				for (std::list<Vertex *>::iterator it = neighbors->begin(); it != neighbors->end(); ++it){
 					if ((*it)->getExpandedStatus())
 					{
 						
@@ -66,7 +77,7 @@ namespace md_islam{
 				//visit lowest cost neighbor
 				int lowestValue = INF;
 				Vertex * minCostVertex_ptr = neighbors->front();
-				for (std::vector<Vertex *>::iterator it = listOfVisitedVertices->begin(); it != listOfVisitedVertices->end(); ++it){
+				for (std::list<Vertex *>::iterator it = listOfVisitedVertices->begin(); it != listOfVisitedVertices->end(); ++it){
 					if ((*it)->getValue() < lowestValue && (*it)->getExpandedStatus() == false)
 					{
 						lowestValue = (*it)->getValue();
@@ -76,21 +87,39 @@ namespace md_islam{
 				calculateShortestWeight(minCostVertex_ptr, end);
 			}
         }
-        void printTree(Vertex * end, Vertex * start){
-            
-            if(end == start){
-				std::cout << start->getVertexLabel() << std::endl;
-                return;
-            }
-            else{
-				std::cout << end->getVertexLabel() << ", ";
-                printTree(end->getParentVertex(), start);
-            }
+
+		void printTreeHelper(Vertex* end, Vertex* start)
+        {
+			if (end == start){
+				this->trace_vector->push_back(start->getVertexLabel());
+				return;
+			}
+			else{
+				this->trace_vector->push_back(end->getVertexLabel());
+				printTreeHelper(end->getParentVertex(), start);
+			}
+        }
+
+	    void printTree(Vertex * end, Vertex * start){
+			printTreeHelper(end, start);
+			for (std::list<char>::reverse_iterator it = this->trace_vector->rbegin(); it != this->trace_vector->rend(); ++it)
+			{
+				std::cout << (*it) << "->";
+			}
+			std::cout << " Goal reached" <<std::endl;
+			//reset vertices properties
+			for (auto &i : *this->listOfVertices)
+			{
+				i->setExpanded(false);
+				i->setValue(false);
+
+			}
         }
 
     private:
-        std::vector<Vertex *> *listOfVertices;
-		std::vector<Vertex *> *listOfVisitedVertices;
+		std::list<char> * trace_vector;
+        std::list<Vertex *> *listOfVertices;
+		std::list<Vertex *> *listOfVisitedVertices;
     };
 }
 

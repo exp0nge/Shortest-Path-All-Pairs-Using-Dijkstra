@@ -8,7 +8,7 @@ md_islam::Vertex::Vertex(char vertexLabel) {
     this->vertexLabel = vertexLabel;
     this->visited = false;
     this->expanded = false;
-	this->neighbors = new std::vector < Vertex* > ;
+	this->neighbors = new std::list < Vertex* > ;
 	this->edgeMap = new std::map < Vertex*, int > ;
 }
 
@@ -20,6 +20,8 @@ void md_islam::Vertex::addNeighbor(Vertex* neighbor_vertex)
 {
 	this->neighbors->push_back(neighbor_vertex);
 }
+
+
 
 md_islam::Vertex *md_islam::Vertex::getParentVertex() {
     return this->parentNode;
@@ -38,7 +40,7 @@ void md_islam::Vertex::setExpanded(bool state) {
     this->expanded = state;
 }
 
-std::vector<md_islam::Vertex *> *md_islam::Vertex::getNeighborVector() {
+std::list<md_islam::Vertex *> *md_islam::Vertex::getNeighborVector() {
     return this->neighbors;
 }
 

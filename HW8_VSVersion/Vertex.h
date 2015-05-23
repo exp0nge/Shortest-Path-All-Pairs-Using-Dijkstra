@@ -5,7 +5,7 @@
 #ifndef HW8_DIJKSTRA_VERTEX_H
 #define HW8_DIJKSTRA_VERTEX_H
 
-#include <vector>
+#include <list>
 #include <map>
 
 namespace md_islam{
@@ -21,6 +21,7 @@ namespace md_islam{
         void setValue(int value);
         void setParentVertex(Vertex * parentNode);
 		void addNeighbor(Vertex* neighbor_vertex);
+		
         //getters
         bool getVisitedStatus();
         bool getExpandedStatus();
@@ -29,11 +30,11 @@ namespace md_islam{
         char getVertexLabel();
         Vertex* getParentVertex();
         std::map<Vertex *, int> *getEdges();
-        std::vector<Vertex *> * getNeighborVector();
+        std::list<Vertex *> * getNeighborVector();
     private:
         Vertex * parentNode;
         char vertexLabel;
-        std::vector<Vertex *> *neighbors;
+        std::list<Vertex *> *neighbors;
         bool visited, expanded;
         int value;
         std::map<Vertex *, int> *edgeMap;

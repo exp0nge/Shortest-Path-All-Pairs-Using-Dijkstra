@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Dijkstra.h"
+#include "ShortestPathPairs.h"
 
 using namespace md_islam;
 using namespace std;
@@ -8,6 +9,7 @@ int main() {
     Vertex * vB = new Vertex('B');
     Vertex * vC = new Vertex('C');
     Vertex * vD = new Vertex('D');
+
     //add neighbors bidirectionally
 	vA->addNeighbor(vB);
 	vA->addNeighbor(vC);
@@ -26,14 +28,19 @@ int main() {
     vD->makeEdge(vC, 3);
     vD->makeEdge(vB, 1);
 
-    vector<Vertex*> * listOfVertices = new vector<Vertex*>;
+	//store all vertices in vector
+    list<Vertex*> * listOfVertices = new list<Vertex*>;
     listOfVertices->push_back(vA);
     listOfVertices->push_back(vB);
     listOfVertices->push_back(vC);
     listOfVertices->push_back(vD);
 
-    Dijkstra dijkstraAlgo(listOfVertices, vA, vD);
-
-
+    /*Dijkstra dijkstraAlgo(listOfVertices, vA, vD);
+	
+	Dijkstra dijkstraAlgo2(listOfVertices, vA, vC);*/
+	
+	ShortestPathPairs SPP(listOfVertices);
+	
+	
     return 0;
 }
